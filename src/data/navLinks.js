@@ -1,4 +1,5 @@
-// src/data/navLinks.js
+import Link from "next/link";
+
 export const navLinks = {
   guest: [
     { name: "Home", path: "/" },
@@ -30,3 +31,13 @@ export const navLinks = {
     { name: "Logout", path: "/logout" },
   ],
 };
+
+export let Navlinks = (
+  <>
+    <Link href="/">Home</Link>
+    <Link href="/">DOCTORS</Link>
+    <Link href="/">PATIANT</Link>
+    <Link href="/">PHARMECHY</Link>
+    <Link href="/">PAGE</Link>
+  </>
+);

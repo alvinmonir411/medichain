@@ -1,7 +1,12 @@
 import React from "react";
+import Hiro from "../Hiro";
 
 const Home = () => {
-  return <div></div>;
+  return (
+    <div>
+      <Hiro />
+    </div>
+  );
 };
 
 export default Home;
