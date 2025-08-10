@@ -8,7 +8,7 @@ const Hiro = () => {
       className="relative w-full h-screen bg-cover bg-center flex items-center"
       style={{ backgroundImage: "url('/assets/HeroImage.jpg')" }}
     >
-      <div className="absolute inset-0 bg-[#3c4858] opacity-70"></div>
+      <div className="absolute inset-0 bg-[#3c4858] opacity-50"></div>
 
       <div className="container mx-auto relative z-10 text-white px-4 md:px-8 lg:px-16 pt-20">
         <h2 className="text-5xl md:text-6xl lg:text-7xl font-extrabold mb-4 leading-tight">
@@ -21,7 +21,7 @@ const Hiro = () => {
 
         <Link
           href="/doctors"
-          className="btn btn-primary btn-lg md:btn-md lg:btn-lg"
+          className="btn_primary px-4 py-3 md:btn-md lg:btn-lg"
         >
           Make Appointment
         </Link>
