@@ -1,7 +1,6 @@
 @import "tailwindcss";
 @plugin "daisyui";
 @layer components {
-  /* Headings */
   .heading_lg {
     @apply text-4xl font-bold text-blue-900;
   }
@@ -12,7 +11,6 @@
     @apply text-lg text-gray-600;
   }
 
-  /* Buttons */
   .btn_primary {
     @apply bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition;
   }
@@ -20,7 +18,6 @@
     @apply bg-blue-900 text-white px-4 py-2 rounded-md hover:bg-blue-800 transition;
   }
 
-  /* Borders */
   .border_primary {
     @apply border-2 border-blue-900;
   }
@@ -29,5 +26,8 @@
   }
   .border_light {
     @apply border border-gray-300;
+  }
+  .text {
+    @apply text-black;
   }
 }

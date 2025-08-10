@@ -1,7 +1,6 @@
-// medichain-frontend/src/app/layout.jsx
+import Navbar from "@/Component/Navbar";
 import "./globals.css";
 import { Inter } from "next/font/google";
-// import { Providers } from './providers'; // You'll create this later for React Query
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -13,13 +12,10 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    // Apply your DaisyUI theme here using data-theme
     <html lang="en" data-theme="medichainTheme">
       <body className={inter.className}>
-        {/* When you set up React Query, wrap children with <Providers> */}
-        {/* <Providers> */}
+        <Navbar />
         {children}
-        {/* </Providers> */}
       </body>
     </html>
   );
