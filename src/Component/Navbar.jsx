@@ -8,57 +8,92 @@ import { Navlinks } from "@/data/navLinks";
 
 const Navbar = () => {
   const [isopen, setIsOpen] = useState(false);
+  const [user, setUser] = useState(true);
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-white/40 shadow-md">
-      <div className="md:container mx-auto px-2 md:px-6">
+    <header className="fixed  top-0 left-0 right-0 z-50 backdrop-blur-md bg-white/40 shadow-md">
+      <div className="md:container mx-auto px-1 md:px-6">
         <nav className="flex justify-between items-center h-16">
           {/* Logo Section */}
-          <div className="flex items-center gap-2">
+          <motion.div
+            initial={{ opacity: 0, x: -150 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.2 }}
+            className="flex items-center gap-2"
+          >
             <Image
               src="/Logo.png"
               alt="Logo"
-              width={120}
+              width={100}
               height={80}
-              className="object-contain "
+              priority
+              className="object-contain w-20 md:w-28 lg:w-36"
             />
-            <p className="font-bold text-2xl ">
+
+            <p className="font-bold  md:text-2xl ">
               Medi<span className="text-blue-700">Chain</span>
             </p>
-          </div>
+          </motion.div>
 
           {/* Navigation Links */}
-          <ul className="hidden md:flex items-center gap-6  text-black font-medium">
+          <motion.ul
+            initial={{ opacity: 0, y: -50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+            className="hidden md:flex items-center gap-6  text-black font-medium"
+          >
             {Navlinks}
-          </ul>
+          </motion.ul>
 
           {/* Right Section */}
-          <div
+          <motion.div
+            initial={{ opacity: 0, y: -50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.2 }}
             className="flex items-center gap-2
            text-gray-600"
           >
-            <button className=" hover:bg-blue-50 rounded-full transition-colors">
+            <button className="hidden md:block hover:bg-blue-50 rounded-full transition-colors">
               <Search
                 className="bg-blue-600 text-white p-2 rounded-full"
-                size={30}
+                size={35}
               />
             </button>
-            <div className="relative w-12 h-12">
-              <Image
-                src="/assets/userAvater.jpg"
-                alt="User Avatar"
-                fill
-                className="rounded-full border-2 border-blue-500 shadow-sm hover:shadow-md transition-shadow duration-300 cursor-pointer object-cover"
-              />
-            </div>
+
+            {user ? (
+              <motion.div
+                initial={{ opacity: 0, y: -50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4 }}
+                className="relative w-12 h-12"
+              >
+                <Image
+                  src="/assets/userAvater.jpg"
+                  alt="User Avatar"
+                  fill
+                  priority
+                  className="rounded-full border-2 border-blue-500 shadow-sm hover:shadow-md transition-shadow duration-300 cursor-pointer object-cover"
+                />
+              </motion.div>
+            ) : (
+              <button className="hidden md:btn_primary px-4 py-3 md:btn-md lg:btn-lg">
+                Creat An Account
+              </button>
+            )}
             {/* for mobile */}
             <button
               onClick={() => setIsOpen(!isopen)}
               className="md:hidden relative"
             >
               {isopen ? (
-                <X size={30} className="text-black" />
+                <X
+                  size={30}
+                  className="text-white bg-blue-600 p-2 rounded-full"
+                />
               ) : (
-                <AlignJustify size={30} className="text-black" />
+                <AlignJustify
+                  size={30}
+                  className="text-white bg-blue-600 p-2 rounded-full"
+                />
               )}
             </button>
             <div className="md:hidden text-center overflow-hidden  ">
@@ -81,11 +116,19 @@ const Navbar = () => {
                     >
                       {link}
                     </motion.li>
-                  ))}
+                  ))}{" "}
+                  {!user && (
+                    <>
+                      <button className="btn_primary px-4 py-3">Login</button>
+                      <button className="btn_primary px-4 py-3">
+                        Create An Account
+                      </button>
+                    </>
+                  )}
                 </motion.ul>
               )}
             </div>
-          </div>
+          </motion.div>
         </nav>
       </div>
     </header>
