@@ -34,7 +34,7 @@ export const navLinks = {
 
 export let Navlinks = (
   <>
-    <Link href="/">Home</Link>
+    <Link href="/">HOME</Link>
     <Link href="/">DOCTORS</Link>
     <Link href="/">PATIANT</Link>
     <Link href="/">PHARMECHY</Link>
