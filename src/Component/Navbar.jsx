@@ -8,7 +8,7 @@ import { Navlinks } from "@/data/navLinks";
 
 const Navbar = () => {
   const [isopen, setIsOpen] = useState(false);
-  const [user, setUser] = useState(true);
+  const [user, setUser] = useState(false);
   return (
     <header className="fixed  top-0 left-0 right-0 z-50 backdrop-blur-md bg-white/40 shadow-md">
       <div className="md:container mx-auto px-1 md:px-6">
@@ -20,14 +20,16 @@ const Navbar = () => {
             transition={{ duration: 0.2 }}
             className="flex items-center gap-2"
           >
-            <Image
-              src="/Logo.png"
-              alt="Logo"
-              width={100}
-              height={80}
-              priority
-              className="object-contain w-20 md:w-28 lg:w-36"
-            />
+            <Link href={"/"}>
+              <Image
+                src="/Logo.png"
+                alt="Logo"
+                width={100}
+                height={80}
+                priority
+                className="object-contain w-20 md:w-28 lg:w-36"
+              />
+            </Link>
 
             <p className="font-bold  md:text-2xl ">
               Medi<span className="text-blue-700">Chain</span>
@@ -75,9 +77,14 @@ const Navbar = () => {
                 />
               </motion.div>
             ) : (
-              <button className="hidden md:btn_primary px-4 py-3 md:btn-md lg:btn-lg">
-                Creat An Account
-              </button>
+              <div className="hidden lg:flex justify-center gap-2">
+                <Link href="/auth/login" className="btn_primary px-3 py-2">
+                  Login
+                </Link>
+                <Link href="/auth/register" className="btn_primary px-4 py-2">
+                  Create An Account
+                </Link>
+              </div>
             )}
             {/* for mobile */}
             <button
