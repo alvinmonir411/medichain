@@ -1,15 +1,35 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import "../../globals.css";
 import { ArrowUpDown } from "lucide-react";
 import Image from "next/image";
+import { useForm } from "react-hook-form";
+import axios from "axios";
 const page = () => {
-  const handleRegistation = (e) => {
-    e.preventDefault();
+  const [imageUrl, setImageUrl] = useState("");
+  console.log(imageUrl);
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm();
+
+  const onSubmit = async (data) => {
+    const imageFile = data.Profile_img[0];
+    const formData = new FormData();
+    formData.append("image", imageFile);
+    try {
+      const res = await axios.post("/api/imageUpload", formData);
+      setImageUrl(res.data.data.url);
+      console.log(res);
+    } catch (err) {
+      console.error("Upload failed:", err);
+    }
   };
   return (
     <div className="">
-      <div className="relative w-full h-screen bg-cover bg-center flex items-center">
+      <div className="relative w-full h-screen bg-cover bg-center flex items-center pt-30">
         <div className="absolute inset-0">
           <Image
             src="/assets/registetionimage.jpg"
@@ -28,7 +48,7 @@ const page = () => {
         </div>
         <div>
           <form
-            onSubmit={handleRegistation}
+            onSubmit={handleSubmit(onSubmit)}
             className="flex flex-col gap-2 py-10"
           >
             <fieldset className="flex flex-col gap-2 py-1 px-5">
@@ -36,6 +56,7 @@ const page = () => {
               <input
                 type="text"
                 name="name"
+                {...register("name", { required: true })}
                 placeholder="Enter your Name"
                 className="border_light px-2 py-2  focus:outline-fuchsia-400   "
               />
@@ -45,6 +66,7 @@ const page = () => {
               <input
                 type="Email"
                 name="email"
+                {...register("email", { required: true })}
                 placeholder="Enter your Email"
                 className="border_light px-2 py-2 focus:outline-fuchsia-400"
               />
@@ -52,8 +74,9 @@ const page = () => {
             <fieldset className="flex flex-col gap-2 py-1 px-5">
               <label className="font-semibold text-gray-700">password</label>
               <input
-                type="password"
+                type="text"
                 name="password"
+                {...register("password", { required: true })}
                 placeholder="Enter your Password"
                 className="border_light px-2 py-2 focus:outline-fuchsia-400"
               />
@@ -80,7 +103,12 @@ const page = () => {
                       PNG, JPG or GIF (max 2MB)
                     </p>
                   </div>
-                  <input id="dropzone-file" type="file" className="hidden" />
+                  <input
+                    id="dropzone-file"
+                    {...register("Profile_img", { required: true })}
+                    type="file"
+                    className="hidden"
+                  />
                 </label>
               </div>
             </fieldset>

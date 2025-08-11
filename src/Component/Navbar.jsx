@@ -10,7 +10,7 @@ const Navbar = () => {
   const [isopen, setIsOpen] = useState(false);
   const [user, setUser] = useState(false);
   return (
-    <header className="fixed  top-0 left-0 right-0 z-50 backdrop-blur-md bg-white/40 shadow-md">
+    <header className="fixed  top-0 left-0 right-0 z-50 backdrop-blur-md bg-white/30 shadow-md">
       <div className="md:container mx-auto px-1 md:px-6">
         <nav className="flex justify-between items-center h-16">
           {/* Logo Section */}
@@ -41,7 +41,7 @@ const Navbar = () => {
             initial={{ opacity: 0, y: -50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
-            className="hidden md:flex items-center gap-6  text-black font-medium"
+            className="hidden md:flex items-center gap-6  text-white font-medium"
           >
             {Navlinks}
           </motion.ul>
