@@ -5,7 +5,8 @@ import { ArrowUpDown } from "lucide-react";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-const page = () => {
+import { registerUser } from "@/lib/authActions";
+const Page = () => {
   const [imageUrl, setImageUrl] = useState("");
   console.log(imageUrl);
   const {
@@ -15,14 +16,25 @@ const page = () => {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = async (data) => {
-    const imageFile = data.Profile_img[0];
-    const formData = new FormData();
+// 
+
+
+
+   const onSubmit = async (data) => {
+   const imageFile = data.Profile_img[0];
+  const formData = new FormData();
     formData.append("image", imageFile);
     try {
       const res = await axios.post("/api/imageUpload", formData);
       setImageUrl(res.data.data.url);
-      console.log(res);
+      console.log(res.data.data.url);
+      // register with firebase
+      const { user, error } = registerUser(data.email, data.password);
+      if (error) {
+        console.log(error);
+      } else {
+        alert("succes");
+      }
     } catch (err) {
       console.error("Upload failed:", err);
     }
@@ -125,4 +137,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

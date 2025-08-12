@@ -1,6 +1,7 @@
 import Navbar from "@/Component/Navbar";
 import "./globals.css";
 import { Inter } from "next/font/google";
+import { Providers } from "@/lib/Providers";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,8 +18,10 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" data-theme="medichainTheme">
       <body className={inter.className}>
-        <Navbar />
-        {children}
+        <Providers>
+          <Navbar />
+          {children}
+        </Providers>
       </body>
     </html>
   );
