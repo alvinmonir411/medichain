@@ -6,9 +6,14 @@ import Image from "next/image";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { registerUser } from "@/lib/authActions";
+import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
+import { login } from "@/lib/Feture/user/userSlice";
+import { userData } from "@/app/api/UserData/route";
+
 const Page = () => {
   const [imageUrl, setImageUrl] = useState("");
-  console.log(imageUrl);
+  const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
@@ -16,13 +21,9 @@ const Page = () => {
     formState: { errors },
   } = useForm();
 
-// 
-
-
-
-   const onSubmit = async (data) => {
-   const imageFile = data.Profile_img[0];
-  const formData = new FormData();
+  const onSubmit = async (data) => {
+    const imageFile = data.Profile_img[0];
+    const formData = new FormData();
     formData.append("image", imageFile);
     try {
       const res = await axios.post("/api/imageUpload", formData);
@@ -30,13 +31,23 @@ const Page = () => {
       console.log(res.data.data.url);
       // register with firebase
       const { user, error } = registerUser(data.email, data.password);
+      const userInfo = {
+        name: data.name,
+        email: data.email,
+        image: imageUrl,
+      };
       if (error) {
         console.log(error);
       } else {
-        alert("succes");
+        console.log(user);
+        // for backend
+        userData(userInfo);
+        dispatch(login({ userInfo }));
+        toast.success("You Have succesfully Registred");
       }
     } catch (err) {
       console.error("Upload failed:", err);
+      toast.error("not Login ");
     }
   };
   return (

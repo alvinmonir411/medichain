@@ -2,6 +2,7 @@ import Navbar from "@/Component/Navbar";
 import "./globals.css";
 import { Inter } from "next/font/google";
 import { Providers } from "@/lib/Providers";
+import { ToastContainer } from "react-toastify";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,6 +20,7 @@ export default function RootLayout({ children }) {
     <html lang="en" data-theme="medichainTheme">
       <body className={inter.className}>
         <Providers>
+          <ToastContainer />
           <Navbar />
           {children}
         </Providers>
