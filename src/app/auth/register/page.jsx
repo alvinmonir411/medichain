@@ -9,10 +9,8 @@ import { registerUser } from "@/lib/authActions";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { login } from "@/lib/Feture/user/userSlice";
-import { userData } from "@/app/api/UserData/route";
 
 const Page = () => {
-  const [imageUrl, setImageUrl] = useState("");
   const dispatch = useDispatch();
   const {
     register,
@@ -27,21 +25,26 @@ const Page = () => {
     formData.append("image", imageFile);
     try {
       const res = await axios.post("/api/imageUpload", formData);
-      setImageUrl(res.data.data.url);
-      console.log(res.data.data.url);
+      const uploadedImageUrl = res.data.data.url;
+      console.log(uploadedImageUrl);
       // register with firebase
       const { user, error } = registerUser(data.email, data.password);
       const userInfo = {
+        roll: "user",
         name: data.name,
         email: data.email,
-        image: imageUrl,
+        image: uploadedImageUrl,
       };
       if (error) {
         console.log(error);
       } else {
         console.log(user);
         // for backend
-        userData(userInfo);
+        await axios.post(
+          `${process.env.NEXT_PUBLIC_API_URL}/users/user`,
+          userInfo
+        );
+
         dispatch(login({ userInfo }));
         toast.success("You Have succesfully Registred");
       }
