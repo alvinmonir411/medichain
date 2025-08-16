@@ -1,14 +1,21 @@
 "use client";
 import { motion } from "framer-motion";
-import { AlignJustify, Search, Settings, X } from "lucide-react";
+import { AlignJustify, Search, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
 import { Navlinks } from "@/data/navLinks";
+import { useSelector } from "react-redux";
+import { useSession } from "next-auth/react";
 
 const Navbar = () => {
+  // const { userInfo: user } = useSelector((state) => state.user);
+  // console.log(user?.image);
+  const { data: session, status } = useSession();
+  const user = session;
+  console.log(session);
   const [isopen, setIsOpen] = useState(false);
-  const [user, setUser] = useState(false);
+
   return (
     <header className="fixed  top-0 left-0 right-0 z-50 backdrop-blur-md bg-white/30 shadow-md">
       <div className="md:container mx-auto px-1 md:px-6">
@@ -69,9 +76,10 @@ const Navbar = () => {
                 className="relative w-12 h-12"
               >
                 <Image
-                  src="/assets/userAvater.jpg"
+                  src={user?.image}
                   alt="User Avatar"
-                  fill
+                  width={50}
+                  height={50}
                   priority
                   className="rounded-full border-2 border-blue-500 shadow-sm hover:shadow-md transition-shadow duration-300 cursor-pointer object-cover"
                 />

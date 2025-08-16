@@ -5,12 +5,14 @@ import { ArrowUpDown } from "lucide-react";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import { registerUser } from "@/lib/authActions";
+import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { login } from "@/lib/Feture/user/userSlice";
 
 const Page = () => {
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const {
     register,
@@ -18,39 +20,38 @@ const Page = () => {
     watch,
     formState: { errors },
   } = useForm();
-
   const onSubmit = async (data) => {
-    const imageFile = data.Profile_img[0];
-    const formData = new FormData();
-    formData.append("image", imageFile);
+    setLoading(true);
     try {
+      const imageFile = data.Profile_img[0];
+      const formData = new FormData();
+      formData.append("image", imageFile);
+
       const res = await axios.post("/api/imageUpload", formData);
       const uploadedImageUrl = res.data.data.url;
-      console.log(uploadedImageUrl);
-      // register with firebase
-      const { user, error } = registerUser(data.email, data.password);
+
       const userInfo = {
         roll: "user",
         name: data.name,
         email: data.email,
+        password: data.password,
         image: uploadedImageUrl,
       };
-      if (error) {
-        console.log(error);
-      } else {
-        console.log(user);
-        // for backend
-        await axios.post(
-          `${process.env.NEXT_PUBLIC_API_URL}/users/user`,
-          userInfo
-        );
 
-        dispatch(login({ userInfo }));
-        toast.success("You Have succesfully Registred");
-      }
+      await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}users/user`,
+        userInfo
+      );
+
+      dispatch(login(userInfo));
+
+      setLoading(false);
+      router.push("/");
+      toast.success("You Have succesfully Registred");
     } catch (err) {
       console.error("Upload failed:", err);
       toast.error("not Login ");
+      setLoading(false);
     }
   };
   return (
@@ -77,47 +78,73 @@ const Page = () => {
             onSubmit={handleSubmit(onSubmit)}
             className="flex flex-col gap-2 py-10"
           >
+            {/* Name */}
             <fieldset className="flex flex-col gap-2 py-1 px-5">
-              <label className="font-semibold text-gray-700 ">Name</label>
+              <label className="font-semibold text-gray-700">Name</label>
               <input
                 type="text"
-                name="name"
-                {...register("name", { required: true })}
+                {...register("name", { required: "Name is required" })}
                 placeholder="Enter your Name"
-                className="border_light px-2 py-2  focus:outline-fuchsia-400   "
+                className="border_light px-2 py-2 focus:outline-fuchsia-400"
               />
+              {errors.name && (
+                <p className="text-red-500 text-sm">{errors.name.message}</p>
+              )}
             </fieldset>
+
+            {/* Email */}
             <fieldset className="flex flex-col gap-2 py-1 px-5">
-              <label className="font-semibold text-gray-700"> Email</label>
+              <label className="font-semibold text-gray-700">Email</label>
               <input
-                type="Email"
-                name="email"
-                {...register("email", { required: true })}
+                type="email"
+                {...register("email", {
+                  required: "Email is required",
+                  pattern: {
+                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                    message: "Invalid email format",
+                  },
+                })}
                 placeholder="Enter your Email"
                 className="border_light px-2 py-2 focus:outline-fuchsia-400"
               />
+              {errors.email && (
+                <p className="text-red-500 text-sm">{errors.email.message}</p>
+              )}
             </fieldset>
+
+            {/* Password */}
             <fieldset className="flex flex-col gap-2 py-1 px-5">
-              <label className="font-semibold text-gray-700">password</label>
+              <label className="font-semibold text-gray-700">Password</label>
               <input
-                type="text"
-                name="password"
-                {...register("password", { required: true })}
+                type="password"
+                {...register("password", {
+                  required: "Password is required",
+                  minLength: {
+                    value: 6,
+                    message: "Password must be at least 6 characters",
+                  },
+                })}
                 placeholder="Enter your Password"
                 className="border_light px-2 py-2 focus:outline-fuchsia-400"
               />
+              {errors.password && (
+                <p className="text-red-500 text-sm">
+                  {errors.password.message}
+                </p>
+              )}
             </fieldset>
+
+            {/* Profile Picture */}
             <fieldset className="flex flex-col gap-2 py-1 px-5">
               <label className="font-semibold text-gray-700">
                 Profile Picture
               </label>
-
               <div className="flex items-center justify-center w-full">
                 <label
                   htmlFor="dropzone-file"
                   className="flex flex-col items-center justify-center w-full h-40 
-                 border-2 border-dashed border-blue-400 rounded-lg cursor-pointer 
-                 bg-blue-50 hover:bg-blue-100 transition"
+        border-2 border-dashed border-blue-400 rounded-lg cursor-pointer 
+        bg-blue-50 hover:bg-blue-100 transition"
                 >
                   <div className="flex flex-col items-center justify-center pt-5 pb-6">
                     <ArrowUpDown size={30} className="text-blue-500" />
@@ -131,17 +158,33 @@ const Page = () => {
                   </div>
                   <input
                     id="dropzone-file"
-                    {...register("Profile_img", { required: true })}
+                    {...register("Profile_img", {
+                      required: "Profile image is required",
+                    })}
                     type="file"
                     className="hidden"
                   />
                 </label>
               </div>
+              {errors.Profile_img && (
+                <p className="text-red-500 text-sm">
+                  {errors.Profile_img.message}
+                </p>
+              )}
             </fieldset>
 
-            <div className="flex justify-center items-center  ">
-              <button type="submit" className="btn_primary  px-10 ">
-                Submit
+            {/* Submit Button */}
+            <div className="flex justify-center items-center">
+              <button
+                type="submit"
+                disabled={loading}
+                className="btn_primary px-10 flex items-center justify-center"
+              >
+                {loading ? (
+                  <span className="animate-spin border-2 border-t-transparent border-white rounded-full w-5 h-5 mr-2"></span>
+                ) : (
+                  "Submit"
+                )}
               </button>
             </div>
           </form>
