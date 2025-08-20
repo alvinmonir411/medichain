@@ -5,16 +5,10 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
 import { Navlinks } from "@/data/navLinks";
-import { useSelector } from "react-redux";
-import { useSession } from "next-auth/react";
 
 const Navbar = () => {
-  // const { userInfo: user } = useSelector((state) => state.user);
-  // console.log(user?.image);
-  const { data: session, status } = useSession();
-  const user = session;
-  console.log(session);
-  const [isopen, setIsOpen] = useState(false);
+  const [user, setuser] = useState(false);
+  const [isopen, setIsOpen] = useState(true);
 
   return (
     <header className="fixed  top-0 left-0 right-0 z-50 backdrop-blur-md bg-white/30 shadow-md">
@@ -76,7 +70,7 @@ const Navbar = () => {
                 className="relative w-12 h-12"
               >
                 <Image
-                  src={user?.image}
+                  src={"/logo.png"}
                   alt="User Avatar"
                   width={50}
                   height={50}

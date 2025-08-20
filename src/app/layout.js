@@ -1,9 +1,8 @@
 import Navbar from "@/Component/Navbar";
 import "./globals.css";
 import { Inter } from "next/font/google";
-import { Providers } from "@/lib/Providers";
+
 import { ToastContainer } from "react-toastify";
-import AuthProvider from "./../Providers/Authprovider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,13 +19,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" data-theme="medichainTheme">
       <body className={inter.className}>
-        <AuthProvider>
-          <Providers>
-            <ToastContainer />
-            <Navbar />
-            {children}
-          </Providers>
-        </AuthProvider>
+        <ToastContainer />
+        <Navbar />
+        {children}
       </body>
     </html>
   );
